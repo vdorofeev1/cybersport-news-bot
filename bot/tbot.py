@@ -1,13 +1,15 @@
-from script.get_news import get_news
+import os
 
-token = "6884364191:AAE0WBA4Sf7bkpE52_88Jsh6uAYQAwfGlCQ"
-
-from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 from telegram import Update, ForceReply
 from telegram.error import BadRequest
+from telegram.ext import Application, CommandHandler
+
+from script.get_news import get_news
+
+token = os.getenv("CYBER_TOKEN")
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def start(update: Update) -> None:
     news = get_news()
     for new in news:
         try:
@@ -16,6 +18,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 reply_markup=ForceReply(selective=True),
             )
         except BadRequest:
+            print(len(new))
             print("жопа")
 
 
